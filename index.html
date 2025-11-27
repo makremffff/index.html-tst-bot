@@ -571,11 +571,9 @@
                 </div>
                 <div class="task-reward">+50 SHIB</div>
             </div>
-            <a href="https://t.me/botbababab" target="_blank" id="taskChannelLink">
-                <button class="task-action-btn" id="taskActionBtn" onclick="completeTask(event)">
-                    <span>Join & Claim Reward</span>
-                </button>
-            </a>
+            <button class="task-action-btn" id="taskActionBtn" onclick="handleTaskAction()">
+                <span>Join & Claim Reward</span>
+            </button>
             <div class="note" style="margin-top: 20px;">
                 💡 **Note:** You must join the channel first, wait 5 seconds, and then click 'Claim Reward'.
             </div>
@@ -908,11 +906,12 @@ You will earn 5% of the revenue from every referral you bring through ads!
         let shibBalance = 0; 
         let adsWatchedToday = 0;
         let spinsToday = 0; 
-        let taskCompleted = false; // NEW STATE VARIABLE
+        let taskCompleted = false; 
+        let taskActionState = 'JOIN_OR_CLAIM'; // NEW: State variable for the button's action
         let withdrawalHistory = [];
         let referralsCount = 0; 
         let isBanned = false; 
-        let isProcessingTask = false; // NEW: Task processing flag
+        let isProcessingTask = false; 
         
         const sectors = [5, 10, 15, 20, 5]; 
 
@@ -923,7 +922,14 @@ You will earn 5% of the revenue from every referral you bring through ads!
             referralsCount = data.referrals_count !== undefined ? data.referrals_count : referralsCount;
             withdrawalHistory = data.withdrawal_history !== undefined ? data.withdrawal_history : withdrawalHistory;
             isBanned = data.is_banned !== undefined ? data.is_banned : isBanned;
-            taskCompleted = data.task_completed !== undefined ? data.task_completed : taskCompleted; // Update task state
+            // Handle taskCompleted update and state reset if successful
+            if (data.task_completed === true) {
+                taskCompleted = true;
+                taskActionState = 'COMPLETED';
+            } else if (data.task_completed === false) {
+                 taskCompleted = false;
+            }
+
             updateUI();
         }
         
@@ -954,6 +960,14 @@ You will earn 5% of the revenue from every referral you bring through ads!
                         date: new Date(item.created_at).toLocaleDateString('en-GB') 
                     }))
                 });
+
+                // Set taskActionState based on loaded data
+                if (taskCompleted) {
+                    taskActionState = 'COMPLETED';
+                } else if (taskActionState === 'COMPLETED') { 
+                    // Prevents resetting to COMPLETED if an error occurred during claim
+                    taskActionState = 'JOIN_OR_CLAIM';
+                }
                 
                 mainScreen.classList.add('visible'); 
 
@@ -991,17 +1005,25 @@ You will earn 5% of the revenue from every referral you bring through ads!
             const taskBtn = document.getElementById('taskActionBtn');
             if (taskBtn) {
                 if (taskCompleted) {
+                    // State: COMPLETED
                     taskBtn.disabled = true;
                     taskBtn.textContent = 'Task Completed (50 SHIB Claimed)';
                     taskBtn.classList.remove('task-action-btn');
                     taskBtn.classList.add('completed');
-                    document.getElementById('taskChannelLink').removeAttribute('href');
                 } else {
+                    // State: NOT COMPLETED
                     taskBtn.disabled = isProcessingTask; // Respect the processing flag
-                    taskBtn.textContent = isProcessingTask ? 'Processing...' : 'Join & Claim Reward';
+                    
+                    if (isProcessingTask) {
+                        taskBtn.textContent = 'Processing...';
+                    } else if (taskActionState === 'CLAIM') {
+                        taskBtn.textContent = 'Click HERE to Claim Reward';
+                    } else {
+                        taskBtn.textContent = 'Join & Claim Reward';
+                    }
+                    
                     taskBtn.classList.remove('completed');
                     taskBtn.classList.add('task-action-btn');
-                    document.getElementById('taskChannelLink').setAttribute('href', 'https://t.me/botbababab');
                 }
             }
 
@@ -1116,7 +1138,7 @@ You will earn 5% of the revenue from every referral you bring through ads!
         
         function circleClick(){ console.log('Circle clicked'); }
 
-        /* ===== Task Screen Functions (UPDATED) ===== */
+        /* ===== Task Screen Functions (UPDATED LOGIC) ===== */
         
         function showTask(){
             if (isBanned) {
@@ -1129,37 +1151,21 @@ You will earn 5% of the revenue from every referral you bring through ads!
             loadUserData();
         }
 
-        // Removed hideTask as it's not used with the new nav button setup
-        // function hideTask(){
-        //     document.getElementById('taskScreen').classList.remove('visible');
-        //     mainScreen.classList.add('visible');
-        // }
-
-        async function completeTask(event){
-            // Prevent the default link navigation if the task isn't completed
-            if (!taskCompleted) {
-                event.preventDefault(); 
-            }
-
+        // Renamed and modified the old completeTask function
+        async function claimTaskReward(){
             if (isBanned) {
                  showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
                  return;
             }
-            if(taskCompleted){
-                // English translation of the Arabic alert message
-                showCustomAlert('Task Completed!', 'You have already completed this task and received the reward.', 'warning');
-                return;
-            }
-            if (isProcessingTask) return; // Prevent double clicking
-
-            const taskBtn = document.getElementById('taskActionBtn');
-            const countdownTime = 5; // 5 seconds delay
+            if (isProcessingTask) return; 
 
             isProcessingTask = true;
-            updateUI(); // Disable the button
+            updateUI(); 
 
-            // 1. Start the countdown alert
-            let countdown = countdownTime;
+            const countdownTime = 5; 
+            let countdown = countdownTime; 
+            
+            // Start the countdown alert (in a loop)
             const timerInterval = setInterval(() => {
                 countdown--;
                 if (countdown >= 0) {
@@ -1169,24 +1175,25 @@ You will earn 5% of the revenue from every referral you bring through ads!
                 }
             }, 1000);
 
-            // 2. Wait for the delay
+            // Wait for the delay
             await new Promise(resolve => setTimeout(resolve, countdownTime * 1000));
             
-            // Re-show the alert one last time to replace the countdown, but only if it's still visible
-            if (customAlert.classList.contains('visible')) {
-                showCustomAlert('Verifying...', 'Contacting server to confirm membership and claim reward.', 'warning');
-            }
+            // Clear interval just in case it wasn't cleared by the countdown check
+            clearInterval(timerInterval);
+            
+            // Show final verification message
+            showCustomAlert('Verifying...', 'Contacting server to confirm membership and claim reward.', 'warning');
 
-
-            // 3. Request Action ID from the Server
+            // 1. Request Action ID from the Server
             const actionId = await requestActionId('completeTask');
             if (!actionId) {
                 isProcessingTask = false;
+                taskActionState = 'JOIN_OR_CLAIM'; // Reset state on error
                 updateUI();
                 return;
             }
 
-            // 4. Send completeTask request to the server
+            // 2. Send completeTask request to the server
             const result = await fetchApi({
                 type: 'completeTask',
                 action_id: actionId
@@ -1195,21 +1202,57 @@ You will earn 5% of the revenue from every referral you bring through ads!
             isProcessingTask = false; // Reset flag
 
             if (result.ok) {
-                // 5. Update state
+                // Update state
                 updateState({ 
                     balance: result.data.new_balance,
                     task_completed: true
                 });
+                taskActionState = 'COMPLETED'; // Ensure state is marked as completed
                 
-                // 6. Custom Alert
+                // Custom Alert
                 // English translation of the Arabic alert message
                 showCustomAlert('Reward Claimed!', `You received 50 SHIB for joining the channel!`, 'success');
                 
             } else {
-                // If the server returns an error about completion or not joined, load data to sync UI
+                // If the server returns an error about completion or not joined, reset to first state
                 loadUserData();
+                taskActionState = 'JOIN_OR_CLAIM'; // Force restart the process
             }
-            updateUI(); // Re-enable button on failure or update status on success
+            updateUI(); 
+        }
+
+        // NEW function to handle the two-step action
+        function handleTaskAction() {
+            if (taskCompleted) {
+                showCustomAlert('Task Completed!', 'You have already completed this task and received the reward.', 'warning');
+                return;
+            }
+            
+            if (isProcessingTask) return; // Prevent double clicking during claim process
+            
+            const channelLink = 'https://t.me/botbababab';
+            
+            if (taskActionState === 'JOIN_OR_CLAIM') {
+                // First click: Redirect to the channel
+                
+                // Use Telegram WebApp function if available, otherwise fallback
+                if (typeof Telegram.WebApp.openTelegramLink === 'function') {
+                     Telegram.WebApp.openTelegramLink(channelLink);
+                } else {
+                     window.open(channelLink, '_blank');
+                }
+                
+                // Update state and UI to prompt for the second click (claim)
+                taskActionState = 'CLAIM'; 
+                updateUI(); 
+                
+                // Show an instruction alert
+                showCustomAlert('Please Join Channel', 'You must join the channel first. Click the button again (after 5 seconds) to claim your reward.', 'warning');
+
+            } else if (taskActionState === 'CLAIM') {
+                // Second click: Start the 5-second delay and server verification
+                claimTaskReward(); // This starts the 5-second timer and server process
+            }
         }
 
         /* ===== Invite Screen Functions (No changes needed) ===== */
