@@ -10,8 +10,11 @@
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap'); 
 
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Vazirmatn', Arial, Helvetica, sans-serif;overflow:hidden;background: #0d0c1d;}
+        body{font-family:'Vazirmatn', Arial, Helvetica, sans-serif;overflow:hidden;background: #0d0c1d; color: #fff;}
         
+        /* -------------------------------------- */
+        /* Core Screen Management */
+        /* -------------------------------------- */
         .app-screen {
             position: fixed;
             inset: 0;
@@ -29,1471 +32,1251 @@
             pointer-events: auto;
             z-index: 20; 
         }
-
-        /* Loading Screen - Minimalistic Spinning Circle */
-        .loading-screen{
-            position:fixed;inset:0;
-            background: #0d0c1d;
-            display:flex;flex-direction:column;justify-content:center;align-items:center;
-            z-index:9999;transition:opacity .5s ease-out;
-        }
-        .loading-screen.hidden{opacity:0;pointer-events:none}
-        
-        .spinner-circle {
-            width: 80px;
-            height: 80px;
-            border: 8px solid rgba(255, 255, 255, 0.1);
-            border-top: 8px solid #00ffff; /* Neon color */
-            border-radius: 50%;
-            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); /* Neon glow */
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* End of Loading Screen */
-
-        /* Main Screen */
-        .main-screen{
-            background-color: #f0f0f0; 
-        }
-        
-        .main-content{flex:1;display:flex;justify-content:center;align-items:center}
-        
-        /* User Circle */
-        .user-circle{
-            position:absolute;top:20px;left:20px;width:70px;height:70px;border:2px dashed #ccc;
-            border-radius:50%;display:flex;flex-direction:column;justify-content:center;
-            align-items:center;cursor:pointer;transition:all .3s ease;z-index:100;overflow:hidden
-        }
-        .user-circle:hover{border-color:#4a90e2;background:rgba(74,144,226,.05)}
-        .user-circle img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:none}
-        .user-circle .placeholder{color:#999;font-size:12px;text-align:center}
-        
-        .user-username{
-            position: absolute;
-            top: 95px;
-            left: 20px;
-            width: 70px;
-            font-size:13px;color:#555;white-space:nowrap;
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .user-id{
-            position: absolute;
-            top: 115px;
-            left: 20px;
-            width: 70px;
-            font-size:11px;color:#888;white-space:nowrap;
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .balance{position:absolute;top:20px;right:20px;background:#fff;border:1px solid #ff5a5a;border-radius:12px;padding:8px 12px;font-family:'Courier New',monospace;font-size:16px;color:#ff2a2a;text-shadow:0 0 2px #ffbbbb;letter-spacing:1px;z-index:101;box-shadow:0 4px 6px rgba(0,0,0,.05)}
-        
-        /* Shared Progress Containers */
-        .progress-group-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 90%;
-            max-width: 300px;
-            z-index: 102;
-        }
-        .daily-progress-container, .spin-progress-container {
-            background: #fff;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,.1);
-            text-align: center;
-            border-left: 5px solid #4a90e2; 
-        }
-        .spin-progress-container {
-            border-left: 5px solid #ff8c00; 
-        }
-        .daily-progress-text, .spin-progress-text {font-size:14px;color:#333;margin-bottom:4px; font-weight: bold;}
-        .daily-progress-bar, .spin-progress-bar {width:100%;height:12px;background:rgba(0,0,0,.1);border-radius:10px;overflow:hidden;margin-top:6px}
-        .daily-progress-fill {height:100%;background:linear-gradient(90deg,#00f2fe,#4facfe);border-radius:10px;width:0%;transition:width .4s ease}
-        .spin-progress-fill {height:100%;background:linear-gradient(90deg,#ff8c00, #ff4500);border-radius:10px;width:0%;transition:width .4s ease}
-
-        /* Button Adjustments - Equal width for 4 buttons */
-        .button-container{
-            position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
-            display:grid; /* Change to grid for better control */
-            grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
-            gap: 8px; /* Slightly reduced gap */
-            background:rgba(240,240,240,.9);padding:10px 10px; /* Reduced padding */
-            border-radius:20px;box-shadow:0 4px 15px rgba(0,0,0,.1);backdrop-filter:blur(10px);
-            width: 95%; /* Increased width for more space */
-            max-width: 450px;
-        }
-        .nav-button{
-            position:relative;background:linear-gradient(145deg,#4a90e2,#357abd);color:#fff;border:none;padding:10px 0; /* Adjust padding for height control */
-            border-radius:10px;font-size:12px; /* Reduced font size for better fit */
-            font-weight:bold;cursor:pointer;transition:all .1s ease;
+        .content {
             flex-grow: 1;
-            min-width: auto;
-            text-transform:uppercase;letter-spacing:.5px;box-shadow:0 5px 0 #2c5aa0,0 8px 12px rgba(0,0,0,.15);transform:translateY(0);
-            text-align: center;
-            line-height: 1; /* Ensure text fits */
-        }
-        .nav-button:hover{transform:translateY(-1px);box-shadow:0 6px 0 #2c5aa0,0 10px 15px rgba(0,0,0,.2)}
-        .nav-button:active{transform:translateY(2px);box-shadow:0 3px 0 #2c5aa0,0 5px 8px rgba(0,0,0,.15)}
-        .nav-button span{display:block;text-shadow:0 1px 2px rgba(0,0,0,.3)}
-
-        .nav-button.task-btn{
-            background:linear-gradient(145deg,#ffc107,#ff9800);
-            box-shadow:0 5px 0 #cc9a00,0 8px 12px rgba(0,0,0,.15);
-        }
-        .nav-button.task-btn:hover{box-shadow:0 6px 0 #cc9a00,0 10px 15px rgba(0,0,0,.2)}
-        .nav-button.task-btn:active{box-shadow:0 3px 0 #cc9a00,0 5px 8px rgba(0,0,0,.15)}
-
-
-        /* ===== Task Screen ===== */
-        .task-screen{
-            display:flex;flex-direction:column;align-items:center;padding:20px 20px;
-            transition:opacity .3s ease;
             overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px; /* Space for the bottom nav */
         }
-        .task-header{ 
-            text-align: center;
-            margin-bottom: 25px;
-            width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 15px;
+        
+        /* Loading Screen - Neon enhancements */
+        .loading-screen{
+            position:fixed;
+            inset:0;
+            background:#000;
+            z-index:999;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            transition:opacity .5s ease-out;
         }
-        .task-title{ 
-             font-size:28px;color:#ff9800;font-weight:700; text-shadow: 0 1px 1px rgba(0,0,0,.1);
+        .loading-text{
+            font-family:'Orbitron', sans-serif;
+            font-size:24px;
+            color:#fff;
+            text-shadow:0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+            animation:flicker 1.5s infinite alternate;
         }
-        .task-description{
-            font-size: 16px;
-            color: #555;
-            margin-top: 10px;
+        @keyframes flicker{
+            0%,100%{opacity:1;text-shadow:0 0 5px #0ff,0 0 10px #0ff,0 0 20px #0ff}
+            50%{opacity:.7;text-shadow:none}
         }
-        .task-card-container {
-            width: 100%;
-            max-width: 400px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0,0,0,.1);
-            border: 1px solid #ddd;
-            margin-bottom: 20px;
+        .spinner{
+            width:40px;
+            height:40px;
+            border:4px solid rgba(255,255,255,.3);
+            border-top-color:#0ff;
+            border-radius:50%;
+            animation:spin 1s ease-in-out infinite;
+            margin-top:15px;
         }
-        .task-item {
-            border: 1px solid #ffeb3b;
-            padding: 15px;
-            border-radius: 10px;
-            background: #fffbe5;
-            margin-bottom: 15px;
+        @keyframes spin{
+            to{transform:rotate(360deg)}
+        }
+
+        /* Header */
+        .header {
+            background: rgba(13, 12, 29, 0.8); /* Semi-transparent background */
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 255, 255, 0.1);
         }
-        .task-info h4 {
-            color: #ff9800;
-            margin-bottom: 5px;
-            font-size: 18px;
+        .balance-container {
+            text-align: right;
+            font-family: 'Orbitron', sans-serif;
+            line-height: 1.2;
         }
-        .task-info p {
-            color: #777;
-            font-size: 14px;
+        .balance-title {
+            font-size: 12px;
+            color: #ccc;
         }
-        .task-reward {
+        .balance-value {
+            font-size: 24px;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+        .balance-value.shib {
+            font-size: 16px;
+            color: #ff9900; /* Shiba-like color */
+        }
+        
+        /* Navigation (Bottom Bar) */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 12, 29, 0.9);
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 255, 255, 0.2);
+            z-index: 30;
+        }
+        .nav-button {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+        }
+        .nav-button:hover, .nav-button.active {
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+        .nav-button i {
             font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        /* -------------------------------------- */
+        /* Home Screen */
+        /* -------------------------------------- */
+        .action-cards-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .action-card {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
+            position: relative;
+        }
+        .action-card:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        .card-icon {
+            font-size: 30px;
+            color: #ff9900;
+            margin-bottom: 10px;
+        }
+        .card-title {
+            font-size: 14px;
             font-weight: bold;
-            color: #28a745;
+            color: #0ff;
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
         }
-        .task-action-btn {
-            background:linear-gradient(145deg, #00bfff, #0077b3);
-            color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;
-            box-shadow:0 4px 0 #005a8d;transition:all .1s ease;
+        .card-limit {
+            font-size: 12px;
+            color: #ccc;
         }
-        .task-action-btn:disabled {
-            background: #ccc;
+        .card-reward {
+             font-size: 12px;
+             color: #ffcc00;
+             margin-top: 5px;
+        }
+        .limit-reached-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 0, 0, 0.7);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: 0 0 5px #000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .action-card.disabled .limit-reached-overlay {
+            opacity: 1;
+        }
+
+        /* -------------------------------------- */
+        /* Spin Screen */
+        /* -------------------------------------- */
+        .wheel-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .wheel-wrapper {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: 300px;
+            max-height: 300px;
+            margin-bottom: 20px;
+            background: #2a2a44;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            border: 5px solid #0ff;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
+            overflow: hidden;
+        }
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            background: #ff9900;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 0 10px #ff9900;
+        }
+        .sector {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 50%;
+            transform-origin: 0% 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sector-inner {
+            position: absolute;
+            left: -100%;
+            top: -100%;
+            width: 200%;
+            height: 200%;
+            transform: rotate(calc(90deg + var(--rotation) * 1deg)) skewY(calc(90deg - var(--angle) * 1deg));
+            background: var(--color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sector-text {
+            position: absolute;
+            transform: rotate(calc(90deg / var(--sectors) + var(--text-rotation) * 1deg)) translate(35%, 0);
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            z-index: 2;
+        }
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #f00;
+            z-index: 15;
+            filter: drop-shadow(0 0 5px #f00);
+        }
+        .spin-button {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff9900, #ffcc00);
+            color: #0d0c1d;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 153, 0, 0.7);
+            transition: background 0.3s, transform 0.1s, box-shadow 0.3s;
+            margin-top: 20px;
+        }
+        .spin-button:disabled {
+            background: #444;
+            color: #999;
             box-shadow: none;
             cursor: not-allowed;
         }
-        .task-action-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #005a8d}
-        
-        .task-action-btn.completed {
-            background:linear-gradient(145deg, #28a745, #1e7e34);
-            box-shadow:0 4px 0 #1c6d32;
+        .spin-button:active:not(:disabled) {
+            transform: scale(0.98);
         }
-        .task-action-btn.completed:active{transform:translateY(2px);box-shadow:0 2px 0 #1c6d32}
-        
-        /* ===== Spin Screen ===== */
-        .spin-screen{
-            display:flex;flex-direction:column;align-items:center;justify-content:center;
-            transition:opacity .3s ease;
+        .spin-message {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #0ff;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
         }
-        #wheelBox{position:relative;margin-bottom:25px}
-        #wheelCanvas{
-            border-radius:50%;
-            /* Enhanced 3D Look */
-            box-shadow:0 0 0 10px #eee, 0 15px 35px rgba(0,0,0,0.4); 
-            background-color: #fefefe; 
-            border: 2px solid #ccc; 
-        }
-        .arrow{
-            position:absolute;top:-16px;left:50%;transform:translateX(-50%);
-            width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;
-            border-top:28px solid #ff3366;filter:drop-shadow(0 3px 2px rgba(0,0,0,.3));z-index:10;
-        }
-        .spin-btn{background:#ff3366;color:#fff;border:none;padding:12px 35px;border-radius:30px;font-size:16px;font-weight:bold;cursor:pointer;box-shadow:0 6px 0 #cc2950;transition:all .1s ease}
-        .spin-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #cc2950}
-        .spin-result{margin-top:18px;font-size:18px;color:#333}
-        .spin-back{margin-top:25px;background:#6c757d;color:#fff;border:none;padding:10px 25px;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;box-shadow:0 4px 0 #5a6268}
-        .spin-back:active{transform:translateY(2px);box-shadow:0 2px 0 #5a6268}
-
-        /* ===== Withdraw Screen - (No changes needed) ===== */
-        .withdraw-screen{
-            display:flex;flex-direction:column;align-items:center;padding:20px 20px;
-            transition:opacity .3s ease;
-            overflow-y: auto;
-        }
-        .withdraw-header{
-            text-align: center;
-            margin-bottom: 25px;
-            width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 15px;
-        }
-        .withdraw-title{
-            font-size:28px;color:#ff2a2a;font-weight:700; text-shadow: 0 1px 1px rgba(0,0,0,.1);
-        }
-        .current-balance-info{
-            font-size: 16px;
-            color: #555;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        .input-form-container {
-            width: 100%;
-            max-width: 400px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 6px 20px rgba(0,0,0,.1);
-            border: 1px solid #ddd;
+        /* -------------------------------------- */
+        /* Withdrawal Screen */
+        /* -------------------------------------- */
+        .form-group {
             margin-bottom: 20px;
         }
-        .input-group{
-            width:100%;margin-bottom:15px;
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #0ff;
+            font-family: 'Orbitron', sans-serif;
         }
-        .input-group label{display:block;margin-bottom:8px;font-size:14px;color:#555;font-weight:600;}
-        .input-group input{width:100%;padding:12px 15px;border:1px solid #ddd;border-radius:10px;font-size:16px;transition:border-color .3s ease, box-shadow .3s ease;outline:none;}
-        .input-group input:focus{border-color:#ff8c00;box-shadow:0 0 0 3px rgba(255,140,0,0.2);}
-        .withdraw-buttons{display:flex;gap:15px;margin-top:20px;justify-content: center;}
-        .withdraw-btn{
-            background:linear-gradient(145deg, #28a745, #1e7e34);
-            color:#fff;border:none;padding:12px 30px;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;
-            box-shadow:0 5px 0 #1c6d32;transition:all .1s ease;
+        .form-group input {
             width: 100%;
+            padding: 10px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #0ff;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.3) inset;
         }
-        .withdraw-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #1c6d32}
-        .back-btn{
-            background:linear-gradient(145deg, #6c757d, #5a6268);
-            color:#fff;border:none;padding:12px 30px;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;
-            box-shadow:0 5px 0 #4e555b;transition:all .1s ease;
+        .form-group input::placeholder {
+            color: #aaa;
         }
-        .back-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #4e555b}
-        .note{margin-top:15px;font-size:13px;color:#777;max-width:400px;text-align:center;background:rgba(255,140,0,0.1);padding:10px;border-radius:10px;border-left: 5px solid #ff8c00;}
-
-        /* Withdrawal History Table */
-        .history-section{
+        .withdraw-button {
             width: 100%;
-            max-width: 400px;
-            margin-top: 30px;
-            padding: 20px 0;
-            border-top: 1px solid #eee;
-            background: rgba(255, 255, 255, 0.9);
             padding: 15px;
-            border-radius: 15px;
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5), 0 0 15px rgba(0, 255, 255, 0.5);
+            transition: opacity 0.3s;
         }
-        .history-title{
-            font-size: 20px;
-            color: #333;
-            margin-bottom: 15px;
-            font-weight: 700;
+        .withdraw-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .withdraw-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #ff9900;
             text-align: center;
         }
-        .history-table{
-            width: 100%;
-            border-collapse: collapse;
+        .withdrawal-history-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #0ff;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 5px;
+        }
+        .withdrawal-list {
+            list-style: none;
+            padding: 0;
+        }
+        .withdrawal-item {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 14px;
         }
-        .history-table th, .history-table td{
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            text-align: left;
-        }
-        .history-table th{
-            background-color: #f0f4f8;
-            color: #4a90e2;
-            font-weight: 700;
-        }
-        .history-table tr:last-child td{
-            border-bottom: none;
-        }
-        .status-pending{color: #ff8c00; font-weight: bold;}
-        .status-completed{color: #28a745; font-weight: bold;}
-        .no-records{text-align: center; color: #999; padding: 20px;}
-        
-        /* ===== Invite Screen - (No changes needed) ===== */
-        .invite-screen{
-            display:flex;flex-direction:column;align-items:center;padding:20px 20px;
-            transition:opacity .3s ease;
-            overflow-y: auto;
-        }
-        .invite-header{ 
-            text-align: center;
-            margin-bottom: 25px;
-            width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 15px;
-        }
-        .invite-title{ 
-             font-size:28px;color:#4a90e2;font-weight:700; text-shadow: 0 1px 1px rgba(0,0,0,.1);
-        }
-        .referrals-count-info{
-            font-size: 18px;
-            color: #333;
-            margin-top: 15px;
+        .withdrawal-item .status {
             font-weight: bold;
-            padding: 10px 15px;
-            background: #e6f0ff;
-            border-radius: 10px;
-            border: 1px solid #cce0ff;
-            box-shadow: 0 2px 5px rgba(0,0,0,.05);
-            width: 100%;
         }
-        .invite-buttons{
-            width: 100%;
+        .withdrawal-item .pending {
+            color: #ffcc00;
+        }
+        .withdrawal-item .completed {
+            color: #0f0;
+        }
+        .withdrawal-item .failed {
+            color: #f00;
+        }
+        .no-history {
+            color: #aaa;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* -------------------------------------- */
+        /* Referral Screen */
+        /* -------------------------------------- */
+        .referral-info {
+            background: rgba(255, 153, 0, 0.05);
+            border: 1px solid rgba(255, 153, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .referral-count {
+            font-size: 36px;
+            font-family: 'Orbitron', sans-serif;
+            color: #ff9900;
+            text-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
+            margin-bottom: 10px;
+        }
+        .referral-link-box {
+            background: #1a1a33;
+            border: 1px dashed #0ff;
+            padding: 10px;
+            border-radius: 5px;
+            word-break: break-all;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #0ff;
+        }
+        .copy-button {
+            padding: 10px 20px;
+            background: #0ff;
+            color: #0d0c1d;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .copy-button:hover {
+            background: #fff;
+        }
+        .commission-rate {
+            font-size: 14px;
+            color: #ccc;
             margin-top: 15px;
         }
-        .copy-link-btn{
-            background:linear-gradient(145deg, #00bfff, #0077b3);
-            color:#fff;border:none;padding:12px 30px;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;
-            box-shadow:0 5px 0 #005a8d;transition:all .1s ease;
-            width: 100%; 
+
+        /* -------------------------------------- */
+        /* Task Screen ⬅️ (تحسين التصميم هنا) */
+        /* -------------------------------------- */
+        .task-list {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .copy-link-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #005a8d}
-        #referralLinkInput{
-            text-align: center;
+        .task-card {
+            background: rgba(0, 255, 255, 0.08); /* Darker, more prominent background */
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px; /* More rounded corners */
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+        }
+        .task-info {
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+        .task-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff9900; /* Shiba color for prominence */
+            margin-bottom: 5px;
+        }
+        .task-description {
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 8px;
+        }
+        .task-reward {
+            font-size: 14px;
+            font-family: 'Orbitron', sans-serif;
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff;
+        }
+        .task-action-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: bold;
             cursor: pointer;
-            font-weight: 500;
-            color: #4a90e2;
-            background: #f8f8f8;
-            word-break: break-all;
-            white-space: normal;
+            transition: all 0.3s;
+            min-width: 100px;
         }
-        
-        /* Custom Alert Overlay - (No changes needed) */
+
+        /* Active Button Style (Not Completed) */
+        .task-action-button.active-task {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.6), 0 0 10px rgba(0, 255, 255, 0.6);
+        }
+        .task-action-button.active-task:hover {
+            transform: scale(1.05);
+        }
+
+        /* Completed Button Style */
+        .task-action-button.completed-task {
+            background: #222;
+            color: #0f0;
+            border: 1px solid #0f0;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            cursor: default;
+        }
+        .task-action-button.completed-task:hover {
+            transform: none;
+        }
+        .task-screen .header-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: #fff;
+            text-shadow: 0 0 10px #0ff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+
+        /* -------------------------------------- */
+        /* Custom Alert */
+        /* -------------------------------------- */
         .custom-alert-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.7);
-            display: none; /* Hidden by default */
-            align-items: center;
+            display: flex;
             justify-content: center;
-            z-index: 99999;
+            align-items: center;
+            z-index: 100;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
         .custom-alert-overlay.visible {
-            display: flex;
             opacity: 1;
+            pointer-events: auto;
         }
-
-        /* Custom Alert Box - 3D Pencil Style - SLIGHTLY SMALLER - (No changes needed) */
-        .custom-alert-box {
-            width: 90%;
-            max-width: 280px; /* Smaller max width */
-            background: #ffffed; /* Off-white paper background */
+        .custom-alert {
+            background: #1a1a33;
             border-radius: 15px;
-            padding: 20px; /* Reduced padding */
+            padding: 25px;
+            width: 90%;
+            max-width: 350px;
             text-align: center;
-            box-shadow: 
-                0 8px 15px rgba(0, 0, 0, 0.3), /* Base shadow */
-                inset 0 0 10px rgba(0, 0, 0, 0.05); /* Inner light effect */
-            border: 3px solid #6b4d32; /* Pencil/Wood border */
-            transform: perspective(600px) rotateX(0deg) scale(0.9);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Spring effect */
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-out;
+            position: relative;
         }
-        .custom-alert-overlay.visible .custom-alert-box {
-            transform: perspective(600px) rotateX(0deg) scale(1);
+        .custom-alert-overlay.visible .custom-alert {
+            transform: scale(1);
         }
-
-        .alert-title {
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 20px; /* Slightly smaller title */
-            font-weight: 700;
-            color: #4CAF50; 
-            margin-bottom: 8px; /* Reduced margin */
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1); 
-            letter-spacing: 0.5px;
-        }
-
-        .alert-message {
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 13px; /* Slightly smaller message */
-            color: #333; 
-            margin-bottom: 18px; /* Reduced margin */
-            white-space: pre-wrap; 
-        }
-
         .alert-icon {
-            font-size: 35px; /* Slightly smaller icon */
-            margin-bottom: 12px;
+            font-size: 40px;
+            margin-bottom: 15px;
         }
-        .alert-icon::before {
-            content: '⭐';
+        .alert-icon.success {
+            color: #0f0;
         }
-
-        .alert-close-btn {
-            background: #6b4d32; 
-            color: #fff;
+        .alert-icon.error {
+            color: #f00;
+        }
+        .alert-icon.info {
+            color: #ffcc00;
+        }
+        .alert-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .alert-message {
+            font-size: 14px;
+            color: #ccc;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+        .alert-close-button {
+            padding: 10px 25px;
+            background: #0ff;
+            color: #0d0c1d;
             border: none;
-            padding: 9px 18px; /* Slightly smaller button */
-            border-radius: 8px;
-            font-size: 15px;
+            border-radius: 5px;
+            font-family: 'Vazirmatn', sans-serif;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 0 #543b27;
-            transition: all 0.1s ease;
         }
-        .alert-close-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #543b27;
-        }
-
-        /* Specific styles for Success */
-        .custom-alert-box.success .alert-title { color: #28a745; }
-        .custom-alert-box.success .alert-icon::before { content: '🎮'; }
-
-        /* Specific styles for Error/Warning */
-        .custom-alert-box.error .alert-title { color: #dc3545; }
-        .custom-alert-box.error .alert-icon::before { content: '🤦'; }
-
-        /* Specific styles for Warning/Info */
-        .custom-alert-box.warning .alert-title { color: #ffc107; }
-        .custom-alert-box.warning .alert-icon::before { content: '⚠️'; }
-
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
-    <div class="loading-screen" id="loadingScreen">
-        <div class="spinner-circle"></div> 
+    
+    <div class="loading-screen" id="loading-screen">
+        <div class="loading-text">LOADING SHIB NET...</div>
+        <div class="spinner"></div>
     </div>
     
-    <div class="app-screen main-screen" id="mainScreen">
-        <div class="balance" id="shibBalance">0 SHIB</div>
-        
-        <div class="progress-group-container">
-            <div class="daily-progress-container">
-                <div class="daily-progress-text">Ads today: <span id="adsCount">0</span> / 100</div>
-                <div class="daily-progress-bar">
-                    <div class="daily-progress-fill" id="dailyProgressFill"></div>
-                </div>
-            </div>
-            <div class="spin-progress-container">
-                <div class="spin-progress-text">Spins today: <span id="spinsCount">0</span> / 15</div>
-                <div class="spin-progress-bar">
-                    <div class="spin-progress-fill" id="spinProgressFill"></div>
-                </div>
-            </div>
+    <div class="custom-alert-overlay" id="custom-alert-overlay">
+        <div class="custom-alert" id="custom-alert">
+            <div class="alert-icon" id="alert-icon"></div>
+            <div class="alert-title" id="alert-title"></div>
+            <div class="alert-message" id="alert-message"></div>
+            <button class="alert-close-button" id="alert-close-button">OK</button>
         </div>
-        
-        <div class="user-circle" onclick="circleClick()">
-            <img id="userImage" src="" alt="User">
-            <div class="placeholder">+</div>
-        </div>
-        <div class="user-username" id="userName"></div>
-        <div class="user-id" id="userId"></div>
-        
-        <div class="main-content"></div>
-        
-        <div class="button-container">
-            <button class="nav-button" onclick="watchAds()"><span>Ads</span></button>
-            <button class="nav-button" onclick="showTask()"><span>Task</span></button>
-            <button class="nav-button" onclick="showSpin()"><span>Spin</span></button>
-            <button class="nav-button" onclick="inviteFriends()"><span>Invite</span></button>
-        </div>
-        </div>
-
-    <div class="app-screen task-screen" id="taskScreen">
-        <div class="task-header">
-            <h2 class="task-title">🚀 One-Time Tasks</h2>
-            <div class="task-description">Complete a simple task and earn an instant reward!</div>
-        </div>
-        
-        <div class="task-card-container">
-            <div class="task-item">
-                <div class="task-info">
-                    <h4>Join Our Telegram Channel</h4>
-                    <p>Click the button, join the channel, and claim your reward.</p>
-                </div>
-                <div class="task-reward">+50 SHIB</div>
-            </div>
-            <a href="https://t.me/botbababab" target="_blank" id="taskChannelLink">
-                <button class="task-action-btn" id="taskActionBtn" onclick="completeTask()">
-                    <span>Join & Claim Reward</span>
-                </button>
-            </a>
-            <div class="note" style="margin-top: 20px; border-left: 5px solid #00bfff; background: rgba(0, 191, 255, 0.1);">
-                💡 **Note:** You must remain in the channel to prevent reward reversal.
-            </div>
-        </div>
-        
-        <button class="back-btn" onclick="hideTask()">Back to Main</button>
     </div>
 
-    <div class="app-screen spin-screen" id="spinScreen">
-        <div id="wheelBox">
-            <div class="arrow"></div>
-            <canvas id="wheelCanvas" width="280" height="280"></canvas>
-        </div>
-        <button class="spin-btn" id="spinBtn" onclick="startSpin()">SPIN</button>
-        <div class="spin-result" id="spinResult"></div>
-        <button class="spin-back" onclick="hideSpin()">Back</button>
-    </div>
-
-    <div class="app-screen withdraw-screen" id="withdrawScreen">
-        <div class="withdraw-header">
-            <h2 class="withdraw-title">💰 Request SHIB Withdrawal</h2>
-            <div class="current-balance-info">Your Balance: <span id="withdrawBalanceDisplay">0 SHIB</span></div>
-        </div>
-        
-        <div class="input-form-container">
-            <div class="input-group">
-                <label>Binance User ID</label>
-                <input type="text" id="binanceId" placeholder="Enter your Binance ID">
+    <div class="app-screen visible" id="home-screen">
+        <div class="header">
+            <div class="user-info">
+                <span class="balance-title">User ID:</span>
+                <div class="balance-value shib" id="display-user-id">...</div>
             </div>
-            <div class="input-group">
-                <label>Amount in SHIB (Min 400)</label>
-                <input type="number" id="withdrawAmount" min="400" value="" placeholder="">
-            </div>
-            <div class="withdraw-buttons">
-                <button class="withdraw-btn" onclick="confirmWithdraw()">Send Request</button>
+            <div class="balance-container">
+                <span class="balance-title">Balance (SHIB)</span>
+                <div class="balance-value" id="display-balance">0</div>
             </div>
         </div>
-        
-        <div class="note">
-            ⚠️ **Important:** The withdrawal will be processed manually within **24 hours**. Ensure your Binance ID is correct.
-        </div>
-        
-        <div class="history-section">
-            <h3 class="history-title">Withdrawal History</h3>
-            <div id="withdrawalHistoryContainer">
+        <div class="content">
+            <h2 style="font-family: 'Orbitron', sans-serif; margin-bottom: 20px; color: #fff;">ACTION CENTER</h2>
+            
+            <div class="action-cards-container">
+                <div class="action-card" id="card-watch-ad">
+                    <i class="card-icon fas fa-video"></i>
+                    <div class="card-title">WATCH AD</div>
+                    <div class="card-reward">+<span id="ad-reward-value">3</span> SHIB</div>
+                    <div class="card-limit">Limit: <span id="ads-watched">0</span>/<span id="ads-limit">100</span></div>
+                    <div class="limit-reached-overlay" id="ad-limit-overlay">LIMIT REACHED</div>
                 </div>
-        </div>
 
-        <button class="back-btn" onclick="hideWithdraw()">Back to Main</button>
+                <div class="action-card" id="card-spin-wheel">
+                    <i class="card-icon fas fa-circle-notch"></i>
+                    <div class="card-title">SPIN & WIN</div>
+                    <div class="card-reward">Up to <span id="spin-max-reward">20</span> SHIB</div>
+                    <div class="card-limit">Limit: <span id="spins-used">0</span>/<span id="spins-limit">15</span></div>
+                    <div class="limit-reached-overlay" id="spin-limit-overlay">LIMIT REACHED</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="app-screen invite-screen" id="inviteScreen">
-        <div class="invite-header">
-            <h2 class="invite-title">🤝 Invite Friends & Earn SHIB</h2>
-            <div class="referrals-count-info">
-                Your Referrals: <span id="referralsCountDisplay">0</span>
+    <div class="app-screen" id="spin-screen">
+        <div class="header">
+            <div class="balance-container" style="margin-left: auto;">
+                <span class="balance-title">Balance (SHIB)</span>
+                <div class="balance-value" id="display-balance-spin">0</div>
             </div>
         </div>
-        
-        <div class="input-form-container">
-            <div class="input-group">
-                <label>Your Referral Link</label>
-                <input type="text" id="referralLinkInput" readonly value="Generating Link...">
-            </div>
-            <div class="invite-buttons">
-                <button class="copy-link-btn" onclick="copyReferralLink()">Copy Link</button>
+        <div class="content">
+            <div class="wheel-container">
+                <h2 style="font-family: 'Orbitron', sans-serif; color: #fff; margin-bottom: 10px;">LUCKY SPIN</h2>
+                <div class="spin-message" id="spin-limit-message">Spins Left: 15</div>
+                
+                <div class="wheel-wrapper">
+                    <div class="wheel" id="spin-wheel">
+                        <div class="wheel-center"></div>
+                    </div>
+                    <div class="pointer"></div>
+                </div>
+                
+                <button class="spin-button" id="spin-button">SPIN</button>
             </div>
         </div>
-        
-        <div class="note">
-       
-🚀 Share this link to invite new users.
-You will earn 5% of the revenue from every referral you bring through ads!
-        </div>
+    </div>
 
-        <button class="back-btn" onclick="hideInvite()">Back to Main</button>
+    <div class="app-screen" id="withdraw-screen">
+        <div class="header">
+            <div class="balance-container" style="margin-left: auto;">
+                <span class="balance-title">Balance (SHIB)</span>
+                <div class="balance-value" id="display-balance-withdraw">0</div>
+            </div>
+        </div>
+        <div class="content">
+            <h2 style="font-family: 'Orbitron', sans-serif; color: #fff; margin-bottom: 20px; text-align: center;">WITHDRAWAL</h2>
+
+            <form id="withdraw-form">
+                <div class="form-group">
+                    <label for="binance-id">Binance Pay ID / Email / Phone</label>
+                    <input type="text" id="binance-id" required placeholder="Enter your Binance Pay ID or Email">
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-amount">Amount (Min: 400 SHIB)</label>
+                    <input type="number" id="withdraw-amount" required min="400" placeholder="Enter amount">
+                </div>
+                <button type="submit" class="withdraw-button" id="submit-withdraw">WITHDRAW</button>
+            </form>
+
+            <p class="withdraw-note">All withdrawal requests are processed manually within 24 hours.</p>
+
+            <h3 class="withdrawal-history-title">History</h3>
+            <ul class="withdrawal-list" id="withdrawal-history-list">
+                </ul>
+        </div>
+    </div>
+
+    <div class="app-screen" id="referral-screen">
+        <div class="header">
+            <div class="balance-container" style="margin-left: auto;">
+                <span class="balance-title">Balance (SHIB)</span>
+                <div class="balance-value" id="display-balance-referral">0</div>
+            </div>
+        </div>
+        <div class="content">
+            <h2 style="font-family: 'Orbitron', sans-serif; color: #fff; margin-bottom: 20px; text-align: center;">REFERRALS</h2>
+
+            <div class="referral-info">
+                <p style="color: #ccc; margin-bottom: 10px;">Total Referrals:</p>
+                <div class="referral-count" id="referrals-count">0</div>
+                <p class="commission-rate">Earn **5%** commission on all earnings by your referrals.</p>
+            </div>
+
+            <h3 style="font-family: 'Orbitron', sans-serif; color: #0ff; margin-bottom: 10px;">Your Link</h3>
+            <div class="referral-link-box" id="referral-link">Loading...</div>
+            <button class="copy-button" id="copy-referral-link">COPY LINK</button>
+
+            <p style="margin-top: 20px; color: #aaa; font-size: 12px; text-align: center;">Share this link to grow your network and increase your passive income.</p>
+        </div>
+    </div>
+
+    <div class="app-screen" id="task-screen">
+        <div class="header">
+            <div class="balance-container" style="margin-left: auto;">
+                <span class="balance-title">Balance (SHIB)</span>
+                <div class="balance-value" id="display-balance-task">0</div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="header-title">ONE-TIME TASKS</div>
+            
+            <div class="task-list">
+                <div class="task-card" id="task-join-telegram">
+                    <div class="task-info">
+                        <div class="task-title">JOIN TELEGRAM CHANNEL</div>
+                        <div class="task-description">Join our official channel to get news and updates.</div>
+                        <div class="task-reward">+50 SHIB (One-Time)</div>
+                    </div>
+                    <button class="task-action-button active-task" id="button-join-telegram" data-task-id="joinTelegram">
+                        JOIN & CLAIM
+                    </button>
+                </div>
+                
+                <p style="margin-top: 30px; color: #aaa; text-align: center;">More tasks coming soon!</p>
+            </div>
+        </div>
     </div>
     
-    <div id="customAlert" class="custom-alert-overlay">
-        <div class="custom-alert-box">
-            <div class="alert-icon" id="alertIcon"></div>
-            <div class="alert-title" id="alertTitle"></div>
-            <div class="alert-message" id="alertMessage"></div>
-            <button class="alert-close-btn" onclick="document.getElementById('customAlert').classList.remove('visible')">OK</button>
-        </div>
+    <div class="bottom-nav">
+        <button class="nav-button active" data-screen="home-screen">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </button>
+        <button class="nav-button" data-screen="spin-screen">
+            <i class="fas fa-circle-notch"></i>
+            <span>Spin</span>
+        </button>
+        <button class="nav-button" data-screen="task-screen">
+            <i class="fas fa-tasks"></i>
+            <span>Task</span>
+        </button>
+        <button class="nav-button" data-screen="referral-screen">
+            <i class="fas fa-users"></i>
+            <span>Referral</span>
+        </button>
+        <button class="nav-button" data-screen="withdraw-screen">
+            <i class="fas fa-wallet"></i>
+            <span>Withdraw</span>
+        </button>
     </div>
 
-    <audio id="backgroundAudio" loop>
-        <source src="audio.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
+    <audio id="bg-audio" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
     </audio>
 
-    <audio id="successSFX">
-        <source src="success.mp3" type="audio/mp3"> 
-    </audio>
-    <audio id="errorSFX">
-        <source src="error.mp3" type="audio/mp3"> 
-    </audio>
-
-    <script src='//libtl.com/sdk.js' data-zone='10245709' data-sdk='show_10245709'></script>
     <script>
-        /* ===== Loading ===== */
-        const loadingScreen = document.getElementById('loadingScreen');
-        const mainScreen = document.getElementById('mainScreen');
+        // Global State Management
+        let appState = {
+            balance: 0,
+            ads_watched_today: 0,
+            spins_today: 0,
+            ads_limit_reached_at: null,
+            spins_limit_reached_at: null,
+            referrals_count: 0,
+            withdrawal_history: [],
+            is_banned: false,
+            task_completed: false, // ⬅️ NEW STATE
+            user_id: null,
+        };
 
-        // Removed the old loading bar logic
+        const DAILY_MAX_ADS = 100;
+        const DAILY_MAX_SPINS = 15;
+        const AD_REWARD = 3;
+        const MIN_WITHDRAW = 400;
 
-        document.addEventListener('DOMContentLoaded',()=>{
-            // Simulating a brief loading time for the spinner to be visible
-            setTimeout(()=>{ 
-                loadingScreen.classList.add('hidden');
-                initDailyProgress(); 
-                playBGAudio(); 
-            }, 1500); 
-        });
-        
-        /* ===== Custom Alert & Audio Functions ===== */
-        
-        const backgroundAudio = document.getElementById('backgroundAudio');
-        const successSFX = document.getElementById('successSFX');
-        const errorSFX = document.getElementById('errorSFX');
-        const customAlert = document.getElementById('customAlert');
-        const alertBox = customAlert.querySelector('.custom-alert-box');
-        const alertTitleEl = document.getElementById('alertTitle');
-        const alertMessageEl = document.getElementById('alertMessage');
-        const alertIconEl = document.getElementById('alertIcon');
-
-
-        /**
-         * Plays background music. Must be called after user interaction.
-         */
-        function playBGAudio() {
-            // Attempt to play only if it's paused or not playing
-            if (backgroundAudio.paused) {
-                backgroundAudio.volume = 0.4; // Set a moderate volume
-                backgroundAudio.play().catch(e => console.log("Background audio play failed, waiting for user click:", e));
-            }
-        }
-        
-        /**
-         * Plays a sound effect (Success or Error).
-         */
-        function playSFX(type) {
-            let sfx;
-            if (type === 'success') {
-                sfx = successSFX;
-            } else if (type === 'error') {
-                sfx = errorSFX;
-            } else {
-                return;
-            }
-            sfx.currentTime = 0; // Rewind to start
-            sfx.volume = 0.8;
-            sfx.play().catch(e => console.log("SFX play failed:", e));
-        }
-
-        /**
-         * Shows a custom, styled alert modal.
-         * @param {string} title - The title of the alert.
-         * @param {string} message - The message content.
-         * @param {'success'|'error'|'warning'} type - The type of alert.
-         */
-        function showCustomAlert(title, message, type = 'warning') {
-            const finalTitle = title;
-            const finalMessage = message.replace(/(\r\n|\n|\r)/gm, "\n"); 
-
-            alertTitleEl.textContent = finalTitle;
-            alertMessageEl.textContent = finalMessage;
-
-            alertBox.classList.remove('success', 'error', 'warning');
-            alertBox.classList.add(type);
-
-            customAlert.classList.add('visible');
-            
-            playSFX(type === 'error' ? 'error' : 'success'); 
-        }
-
-
-        /* ===== Telegram User & Referral Setup (Modified to include audio) ===== */
-        Telegram.WebApp.ready();
-        
-        let tgUser = null;
-        if(Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user){
-            tgUser = Telegram.WebApp.initDataUnsafe.user;
-            const photoUrl = tgUser.photo_url;
-            const userName = tgUser.first_name + (tgUser.last_name? ' '+tgUser.last_name:'');
-            const userId = tgUser.id;
-            const imgEl  = document.getElementById('userImage');
-            const nameEl = document.getElementById('userName');
-            const idEl   = document.getElementById('userId');
-            const placeHolder = document.querySelector('.placeholder');
-            if(photoUrl){
-                imgEl.src = photoUrl;
-                imgEl.style.display = 'block';
-                placeHolder.style.display = 'none';
-            }
-            nameEl.textContent = userName;
-            idEl.textContent   = 'ID: ' + userId;
-        }
-
-        function getRefParam() {
-            let referrerId = null;
-            const REF_PREFIX = 'ref_';
-
-            if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.start_param) {
-                const startParam = Telegram.WebApp.initDataUnsafe.start_param;
-                if (startParam.startsWith(REF_PREFIX)) {
-                    referrerId = startParam.substring(REF_PREFIX.length);
-                    console.log('Referrer ID from start_param:', referrerId);
-                }
-            } 
-            return referrerId; 
-        }
-
-        let referrerId = getRefParam();
+        // Configuration
         const API_URL = '/api'; 
+        const BOT_USERNAME = 'ShibAdsBot'; // Replace with your actual bot username
+        const TELEGRAM_CHANNEL_URL = 'https://t.me/botbababab'; // ⬅️ Task Channel
+
+        // DOM Elements
+        const screens = document.querySelectorAll('.app-screen');
+        const navButtons = document.querySelectorAll('.bottom-nav .nav-button');
+        const loadingScreen = document.getElementById('loading-screen');
+        const adCard = document.getElementById('card-watch-ad');
+        const spinCard = document.getElementById('card-spin-wheel');
+
+        // Spin Wheel DOM
+        const spinWheelElement = document.getElementById('spin-wheel');
+        const spinButton = document.getElementById('spin-button');
+        const spinMessage = document.getElementById('spin-limit-message');
+
+        // Task DOM
+        const joinTelegramTaskCard = document.getElementById('task-join-telegram');
+        const joinTelegramButton = document.getElementById('button-join-telegram');
         
-        // ------------------------------------------------------------------
-        // **fetchApi Function** // ------------------------------------------------------------------
+        // Withdrawal DOM
+        const withdrawForm = document.getElementById('withdraw-form');
+        const withdrawalHistoryList = document.getElementById('withdrawal-history-list');
+
+        // Audio
+        const bgAudio = document.getElementById('bg-audio');
+        function playBGAudio() {
+            if (bgAudio.paused) {
+                bgAudio.volume = 0.3;
+                bgAudio.play().catch(e => console.warn("Audio Play failed:", e));
+            }
+        }
+
+        // --- Core Functions ---
+
+        /**
+         * Fetches data from the server API.
+         */
         async function fetchApi(payload) {
-            if (!tgUser) {
-                // English translation of the Arabic alert message
-                showCustomAlert('Critical Error!', 'User data not initialized. Please restart the app. [CODE: U_NIL]', 'error');
-                return { ok: false, error: 'User not initialized' };
-            }
-
-            const initData = Telegram.WebApp.initData;
-            if (!initData) {
-                // English translation of the Arabic alert message
-                showCustomAlert('Critical Error!', 'Initialization data is missing. Please restart the app. [CODE: ID_MS]', 'error');
-                return { ok: false, error: 'InitData missing' };
-            }
-
-            if (typeof Telegram.WebApp.showProgress === 'function') {
-                Telegram.WebApp.showProgress();
-            }
-            
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        ...payload,
-                        user_id: tgUser.id,
-                        initData: initData 
-                    }),
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...payload, initData: window.Telegram.WebApp.initData })
                 });
 
-                if (typeof Telegram.WebApp.hideProgress === 'function') {
-                    Telegram.WebApp.hideProgress();
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ error: `Server error: ${response.status}` }));
+                    throw new Error(errorData.error || errorData.message || `HTTP error! Status: ${response.status}`);
                 }
 
-                const data = await response.json();
+                return await response.json();
 
-                if (!response.ok || !data.ok) {
-                    const errorMessage = data.error || `Server Error: ${response.status} ${response.statusText}`;
-                    console.error(`API Call failed for type ${payload.type}:`, errorMessage);
-                    let alertTitle = 'Operation Failed!';
-                    let alertType = 'error';
-                    let cleanMessage = errorMessage;
-
-                    if (response.status === 429) {
-                        alertTitle = 'Rate Limit Exceeded!';
-                        alertType = 'warning';
-                        cleanMessage = 'You have exceeded the allowed request limit. Please try again later.';
-                    } else if (errorMessage.includes('banned')) {
-                        alertTitle = 'Access Denied!';
-                        alertType = 'error';
-                        cleanMessage = 'This account has been banned.';
-                    } else if (errorMessage.includes('limit reached')) {
-                        alertTitle = 'Daily Limit Reached!';
-                        alertType = 'warning';
-                        cleanMessage = 'You have reached the maximum number of allowed actions for today.';
-                    } else if (errorMessage.includes('Server Token') || response.status === 409 || response.status === 408) {
-                        alertTitle = 'Security Error!';
-                        alertType = 'error';
-                        cleanMessage = 'A security-related error occurred. Please try again.';
-                    } else if (payload.type === 'completeTask' && errorMessage.includes('already completed')) {
-                        alertTitle = 'Task Completed!';
-                        alertType = 'warning';
-                        cleanMessage = 'You have already completed this task and received the reward.';
-                    } else if (payload.type === 'completeTask' && errorMessage.includes('not joined')) {
-                        alertTitle = 'Task Failed!';
-                        alertType = 'error';
-                        cleanMessage = 'You must join the channel first to claim the reward.';
-                    } else {
-                        // General error handling (English)
-                        alertTitle = 'Operation Failed!';
-                        alertType = 'error';
-                        cleanMessage = errorMessage;
-                    }
-                    
-                    showCustomAlert(alertTitle, cleanMessage, alertType);
-                    return { ok: false, error: errorMessage };
-                }
-
-                return data;
             } catch (error) {
-                if (typeof Telegram.WebApp.hideProgress === 'function') {
-                    Telegram.WebApp.hideProgress();
-                }
-                console.error(`General Fetch Error for type ${payload.type}:`, error.message);
-                // English translation of the Arabic alert message
-                showCustomAlert('Connection Error!', 'Could not connect to the server. Please check your internet connection.', 'error');
+                console.error('API Call Failed:', error.message);
+                showCustomAlert('Error', error.message, 'error');
                 return { ok: false, error: error.message };
             }
         }
-
-        // ------------------------------------------------------------------
-        // NEW: Function to request Action ID from the Server
-        // ------------------------------------------------------------------
-        async function requestActionId(actionType) {
-            const result = await fetchApi({ 
-                type: 'generateActionId', 
-                action_type: actionType 
+        
+        /**
+         * Switches the visible screen and updates the navigation bar.
+         */
+        function switchScreen(targetId) {
+            screens.forEach(screen => {
+                screen.classList.remove('visible');
+                if (screen.id === targetId) {
+                    screen.classList.add('visible');
+                }
             });
-            
-            if (result.ok) {
-                return result.data.action_id;
-            }
-            return null;
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-screen') === targetId) {
+                    btn.classList.add('active');
+                }
+            });
+            // Update balance displays for the active screen
+            updateUI(); 
         }
 
-
-        /* ===== Rewards, Limits, and Anti-Cheat (Limits here are for display only) ===== */
-        const DAILY_MAX = 100;
-        const DAILY_MAX_SPINS = 15;
-        
-        let shibBalance = 0; 
-        let adsWatchedToday = 0;
-        let spinsToday = 0; 
-        let taskCompleted = false; // NEW STATE VARIABLE
-        let withdrawalHistory = [];
-        let referralsCount = 0; 
-        let isBanned = false; 
-        
-        const sectors = [5, 10, 15, 20, 5]; 
-
-        function updateState(data) {
-            shibBalance = data.balance !== undefined ? data.balance : shibBalance;
-            adsWatchedToday = data.ads_watched_today !== undefined ? data.ads_watched_today : adsWatchedToday;
-            spinsToday = data.spins_today !== undefined ? data.spins_today : spinsToday;
-            referralsCount = data.referrals_count !== undefined ? data.referrals_count : referralsCount;
-            withdrawalHistory = data.withdrawal_history !== undefined ? data.withdrawal_history : withdrawalHistory;
-            isBanned = data.is_banned !== undefined ? data.is_banned : isBanned;
-            taskCompleted = data.task_completed !== undefined ? data.task_completed : taskCompleted; // Update task state
+        /**
+         * Updates the global app state and refreshes the UI.
+         */
+        function updateState(newState) {
+            appState = { ...appState, ...newState };
             updateUI();
         }
-        
-        async function loadUserData() {
-            if (!tgUser) return;
+
+        /**
+         * Central function to update all dynamic UI elements.
+         */
+        function updateUI() {
+            const { balance, ads_watched_today, spins_today, referrals_count, task_completed } = appState;
             
-            const result = await fetchApi({ type: 'getUserData' }); 
+            // 1. Balance Displays
+            const balanceDisplays = document.querySelectorAll('.balance-value');
+            balanceDisplays.forEach(el => {
+                if (el.id.includes('balance')) {
+                   el.textContent = balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                }
+            });
+
+            // 2. Home Screen Cards (Ads)
+            document.getElementById('ads-watched').textContent = ads_watched_today;
+            document.getElementById('ads-limit').textContent = DAILY_MAX_ADS;
+            const isAdLimitReached = ads_watched_today >= DAILY_MAX_ADS;
+            adCard.classList.toggle('disabled', isAdLimitReached);
+            adCard.style.cursor = isAdLimitReached ? 'default' : 'pointer';
+
+            // 3. Home Screen Cards (Spin)
+            document.getElementById('spins-used').textContent = spins_today;
+            document.getElementById('spins-limit').textContent = DAILY_MAX_SPINS;
+            const isSpinLimitReached = spins_today >= DAILY_MAX_SPINS;
+            spinCard.classList.toggle('disabled', isSpinLimitReached);
+            spinCard.style.cursor = isSpinLimitReached ? 'default' : 'pointer';
+            
+            // Spin Screen
+            spinMessage.textContent = `Spins Left: ${DAILY_MAX_SPINS - spins_today}`;
+            spinButton.disabled = isSpinLimitReached;
+
+            // 4. Referral Screen
+            document.getElementById('referrals-count').textContent = referrals_count;
+            
+            // 5. Withdrawal Screen
+            document.getElementById('withdraw-amount').max = Math.floor(balance);
+            document.getElementById('submit-withdraw').disabled = balance < MIN_WITHDRAW;
+
+            // 6. Task Screen ⬅️ NEW UI UPDATE
+            updateTaskUI(task_completed);
+        }
+        
+        /**
+         * Updates the Task UI based on completion status.
+         */
+        function updateTaskUI(isCompleted) {
+            if (isCompleted) {
+                joinTelegramButton.textContent = 'COMPLETED';
+                joinTelegramButton.classList.remove('active-task');
+                joinTelegramButton.classList.add('completed-task');
+                joinTelegramButton.disabled = true;
+            } else {
+                joinTelegramButton.textContent = 'JOIN & CLAIM';
+                joinTelegramButton.classList.remove('completed-task');
+                joinTelegramButton.classList.add('active-task');
+                joinTelegramButton.disabled = false;
+            }
+        }
+        
+        /**
+         * Displays the withdrawal history list.
+         */
+        function displayWithdrawals() {
+            const history = appState.withdrawal_history;
+            withdrawalHistoryList.innerHTML = '';
+            
+            if (history.length === 0) {
+                withdrawalHistoryList.innerHTML = '<li class="no-history">No withdrawal history yet.</li>';
+                return;
+            }
+
+            history.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'withdrawal-item';
+                
+                const statusClass = item.status === 'pending' ? 'pending' : (item.status === 'completed' ? 'completed' : 'failed');
+                
+                li.innerHTML = `
+                    <span>${new Date(item.created_at).toLocaleDateString()}</span>
+                    <span>${parseFloat(item.amount).toLocaleString()} SHIB</span>
+                    <span class="status ${statusClass}">${item.status.toUpperCase()}</span>
+                `;
+                withdrawalHistoryList.appendChild(li);
+            });
+        }
+        
+        // --- Security Action ID Handling ---
+        
+        /**
+         * Requests and returns a single-use action ID from the server.
+         */
+        async function requestActionId(actionType) {
+            try {
+                const result = await fetchApi({ type: 'generateActionId', action_type: actionType });
+                if (result.ok && result.data.action_id) {
+                    return result.data.action_id;
+                }
+                showCustomAlert('Error', 'Failed to get server token.', 'error');
+                return null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        // --- Data Initialization ---
+
+        /**
+         * Registers a new user or loads initial data.
+         */
+        async function loadUserData() {
+            const { user } = window.Telegram.WebApp.initDataUnsafe;
+            if (!user) {
+                showCustomAlert('Error', 'User data not found in Telegram initData.', 'error');
+                return;
+            }
+
+            appState.user_id = user.id;
+            document.getElementById('display-user-id').textContent = user.id;
+
+            // Step 1: Register or ensure user exists
+            const urlParams = new URLSearchParams(window.location.search);
+            const refBy = urlParams.get('start') ? parseInt(urlParams.get('start')) : null;
+
+            await fetchApi({
+                type: 'register',
+                user_id: user.id,
+                ref_by: refBy // Only sends ref_by if it's a valid ID from the start parameter
+            });
+            
+            // Step 2: Fetch user data
+            const result = await fetchApi({ type: 'getUserData', user_id: user.id });
 
             if (result.ok) {
+                // If banned, show alert and lock UI
                 if (result.data.is_banned) {
-                    isBanned = true;
-                    mainScreen.classList.remove('visible');
-                    // English translation of the Arabic alert message
-                    showCustomAlert('Account Banned!', 'This account has been permanently restricted for violating policies. Access to the Mini App is denied.', 'error');
+                    showCustomAlert('BANNED', 'Your account has been permanently banned.', 'error', () => {
+                        document.body.innerHTML = '<div style="color:red; text-align:center; padding-top:100px;">ACCOUNT BANNED</div>';
+                    });
                     return;
                 }
                 
-                updateState({
-                    balance: result.data.balance,
-                    ads_watched_today: result.data.ads_watched_today,
-                    spins_today: result.data.spins_today,
-                    referrals_count: result.data.referrals_count,
-                    is_banned: false, 
-                    task_completed: result.data.task_completed || false, // Default to false
-                    withdrawal_history: (result.data.withdrawal_history || []).map(item => ({
-                        amount: item.amount,
-                        status: item.status,
-                        date: new Date(item.created_at).toLocaleDateString('en-GB') 
-                    }))
-                });
+                // Update global state
+                updateState(result.data);
                 
-                mainScreen.classList.add('visible'); 
+                // Set Referral Link
+                document.getElementById('referral-link').textContent = `https://t.me/${BOT_USERNAME}?start=${user.id}`;
+                
+                // Display History
+                displayWithdrawals();
 
+                // Hide Loading Screen
+                setTimeout(() => {
+                    loadingScreen.style.opacity = '0';
+                    loadingScreen.addEventListener('transitionend', () => loadingScreen.style.display = 'none');
+                }, 500);
+
+            } else {
+                showCustomAlert('Error', 'Failed to load user data.', 'error');
             }
         }
         
-        async function initDailyProgress(){
-            if (!tgUser) return;
+        // --- Custom Alert Implementation ---
+        
+        const alertOverlay = document.getElementById('custom-alert-overlay');
+        const alertIcon = document.getElementById('alert-icon');
+        const alertTitle = document.getElementById('alert-title');
+        const alertMessage = document.getElementById('alert-message');
+        const alertCloseButton = document.getElementById('alert-close-button');
 
-            const registerResult = await fetchApi({ 
-                type: 'register',
-                ref_by: referrerId ? referrerId : null 
+        function showCustomAlert(title, message, type = 'info', onCloseCallback = null) {
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+
+            alertIcon.className = 'alert-icon'; // Reset classes
+            if (type === 'success') {
+                alertIcon.classList.add('fas', 'fa-check-circle', 'success');
+            } else if (type === 'error') {
+                alertIcon.classList.add('fas', 'fa-times-circle', 'error');
+            } else {
+                alertIcon.classList.add('fas', 'fa-info-circle', 'info');
+            }
+            
+            const closeHandler = () => {
+                alertOverlay.classList.remove('visible');
+                alertCloseButton.removeEventListener('click', closeHandler);
+                if (onCloseCallback) {
+                    onCloseCallback();
+                }
+            };
+
+            alertCloseButton.addEventListener('click', closeHandler);
+            alertOverlay.classList.add('visible');
+        }
+
+        // --- Event Handlers ---
+
+        // Navigation
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetScreen = button.getAttribute('data-screen');
+                switchScreen(targetScreen);
             });
-
-            if (registerResult.ok) {
-                await loadUserData(); 
-            }
-        }
+        });
         
-        function updateUI(){
-            document.getElementById('shibBalance').textContent = shibBalance.toLocaleString() + ' SHIB';
-            document.getElementById('withdrawBalanceDisplay').textContent = shibBalance.toLocaleString() + ' SHIB';
-
-            document.getElementById('adsCount').textContent = adsWatchedToday;
-            const adsPercent = Math.min((adsWatchedToday / DAILY_MAX) * 100, 100);
-            document.getElementById('dailyProgressFill').style.width = adsPercent + '%';
-
-            document.getElementById('spinsCount').textContent = spinsToday; 
-            const spinsPercent = Math.min((spinsToday / DAILY_MAX_SPINS) * 100, 100);
-            document.getElementById('spinProgressFill').style.width = spinsPercent + '%';
-
-            document.getElementById('referralsCountDisplay').textContent = referralsCount.toLocaleString();
+        // Watch Ad
+        adCard.addEventListener('click', async () => {
+            if (adCard.classList.contains('disabled')) return;
             
-            // Task Button State Update
-            const taskBtn = document.getElementById('taskActionBtn');
-            if (taskBtn) {
-                if (taskCompleted) {
-                    taskBtn.disabled = true;
-                    taskBtn.textContent = 'Task Completed (50 SHIB Claimed)';
-                    taskBtn.classList.remove('task-action-btn');
-                    taskBtn.classList.add('completed');
-                    document.getElementById('taskChannelLink').removeAttribute('href');
-                } else {
-                    taskBtn.disabled = false;
-                    taskBtn.textContent = 'Join & Claim Reward';
-                    taskBtn.classList.remove('completed');
-                    taskBtn.classList.add('task-action-btn');
-                    document.getElementById('taskChannelLink').setAttribute('href', 'https://t.me/botbababab');
-                }
-            }
-
-
-            const adButton = document.querySelector('button[onclick="watchAds()"]');
-            if (adButton) {
-                if (isBanned || adsWatchedToday >= DAILY_MAX) {
-                    adButton.disabled = true;
-                    adButton.querySelector('span').textContent = 'LIMIT REACHED';
-                } else {
-                    adButton.disabled = false;
-                    adButton.querySelector('span').textContent = 'Ads';
-                }
-            }
-
-            const spinBtn = document.getElementById('spinBtn');
-            if (spinBtn) {
-                if (isBanned || spinsToday >= DAILY_MAX_SPINS) {
-                    spinBtn.disabled = true;
-                    spinBtn.textContent = `LIMIT REACHED (${spinsToday}/${DAILY_MAX_SPINS})`;
-                } else if (!spinning) {
-                    spinBtn.disabled = false;
-                    spinBtn.textContent = 'SPIN';
-                }
-            }
-        }
-        
-        // ***************************************************************
-        // UPDATED watchAds FUNCTION FOR TWO SEQUENTIAL ADS (NO INTERMEDIATE ALERTS)
-        // ***************************************************************
-        async function watchAds(){
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            
-            if (adsWatchedToday >= DAILY_MAX) {
-                showCustomAlert('Daily Limit Reached!', `ＡＬＬ ａｄｓ Ｄｏｎｅ (${DAILY_MAX}). Ｃｏｍｅ ｂａｃｋ Ａｆｔｅｒ 6 Ｈｏｕｒｓ🥩!`, 'warning');
-                return;
-            }
-
-            // 1. Request Action ID from the Server
+            // 1. Get Action ID from the Server
             const actionId = await requestActionId('watchAd');
-            if (!actionId) return; // Error message already shown by fetchApi
-
-            // 2. Show First Ad - NO ALERT HERE
-            show_10245709()
-                .then(() => {
-                    // Success for Ad 1 - Immediately start the second ad - NO ALERT HERE
-                    return show_10245709();
-                })
-                .then(async () => {
-                    // Success for Ad 2 -> Proceed to reward logic
-                    
-                    // 3. Request ad reward from the server (Server determines reward, checks limits, and validates Action ID)
-                    const adResult = await fetchApi({
-                        type: 'watchAd',
-                        action_id: actionId // ⬅️ Send Server-Issued ID
-                    });
-
-                    if (adResult.ok) {
-                        const actualReward = adResult.data.actual_reward; 
-                        
-                        // 4. Update UI with trusted server values
-                        updateState({
-                            balance: adResult.data.new_balance,
-                            ads_watched_today: adResult.data.new_ads_count
-                        });
-                        
-                        // 5. Referral commission logic
-                        if (referrerId) {
-                            fetchApi({
-                                type: 'commission',
-                                referrer_id: referrerId,
-                                referee_id: tgUser.id
-                            }).then(r => {
-                                if (r.ok) { console.log('Commission sent successfully.'); }
-                                else { console.warn('Commission failed to send:', r.error); }
-                            });
-                        }
-                        
-                        // 6. Custom Alert for Success (in English)
-                        let alertTitle = 'Reward Granted!';
-                        let alertType = 'success';
-                        let alertMessage = ` ＹＯＵ ＷＩＮ ${actualReward} SHIB.`;
-                        
-                        if(adResult.data.new_ads_count >= DAILY_MAX){
-                            alertTitle = 'Daily Task Completed!';
-                            // **UPDATED MESSAGE HERE** to 'Come back in 6 hours.'
-                            alertMessage = `Congratulations! You have completed all today's ads (${DAILY_MAX}). ＣＯＭＥ ｂａｃｋ ａｆｔｅｒ 6 Ｈｏｕｒｓ!`;
-                        }
-                        showCustomAlert(alertTitle, alertMessage, alertType);
-
-                    }
-                })
-                .catch(e => {
-                    // Catch block handles failure for either Ad 1 or Ad 2
-                    console.error("libtl.com Ad sequence failed:", e);
-                    if (typeof e === 'string' && e.includes('canceled')) {
-                        // English translation of the Arabic alert message
-                        showCustomAlert('Ad Cancelled/Failed!', 'The ad sequence was interrupted. Please watch both ads completely to receive the reward.', 'warning');
-                    } else {
-                        // English translation of the Arabic alert message
-                        showCustomAlert('Ad Load Failed!', 'One of the ads failed to load. Please try again.', 'error');
-                    }
-                });
-        }
-        // ***************************************************************
-        // END OF UPDATED watchAds FUNCTION
-        // ***************************************************************
-        
-        function circleClick(){ console.log('Circle clicked'); }
-
-        /* ===== Task Screen Functions (NEW) ===== */
-        
-        function showTask(){
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            mainScreen.classList.remove('visible');
-            document.getElementById('taskScreen').classList.add('visible');
-            loadUserData();
-        }
-
-        function hideTask(){
-            document.getElementById('taskScreen').classList.remove('visible');
-            mainScreen.classList.add('visible');
-        }
-
-        async function completeTask(){
-            if (isBanned) {
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            if(taskCompleted){
-                // English translation of the Arabic alert message
-                showCustomAlert('Task Completed!', 'You have already completed this task and received the reward.', 'warning');
-                return;
-            }
-
-            // 1. Request Action ID from the Server
-            const actionId = await requestActionId('completeTask');
             if (!actionId) return;
 
-            // 2. Send completeTask request to the server
+            // 2. Simulate the Ad Watch delay (e.g., 3 seconds minimum)
+            // Telegram.WebApp.showAlert('Ad started. Please wait...'); 
+            // await new Promise(resolve => setTimeout(resolve, 3000));
+            
+            // 3. Send server request
             const result = await fetchApi({
-                type: 'completeTask',
-                action_id: actionId
+                type: 'watchAd',
+                user_id: appState.user_id,
+                action_id: actionId 
             });
 
             if (result.ok) {
-                // 3. Update state
+                // 4. Update state and UI with trusted server values
                 updateState({ 
-                    balance: result.data.new_balance,
-                    task_completed: true
+                    balance: result.data.new_balance, 
+                    ads_watched_today: result.data.new_ads_count 
                 });
+                showCustomAlert('Success!', `You earned ${result.data.actual_reward} SHIB.`, 'success');
+            } else {
+                 showCustomAlert('Ad Error', result.error || 'Failed to claim reward.', 'error');
+            }
+        });
+
+        // Spin Logic
+        
+        // Configuration for the wheel sectors (prize, color)
+        const SPIN_SECTORS_CONFIG = [
+            { prize: 5, color: '#ff00ff' }, // Magenta
+            { prize: 10, color: '#00ffff' }, // Cyan
+            { prize: 15, color: '#ff9900' }, // Orange
+            { prize: 20, color: '#0f0' }, // Green
+            { prize: 5, color: '#ff00ff' }  // Magenta (repeated for 5 sectors)
+        ];
+        const SECTORS_COUNT = SPIN_SECTORS_CONFIG.length;
+        const SEGMENT_ANGLE = 360 / SECTORS_COUNT;
+        
+        function createWheel() {
+            spinWheelElement.innerHTML = '';
+            SPIN_SECTORS_CONFIG.forEach((sector, index) => {
+                const element = document.createElement('div');
+                element.className = 'sector';
                 
-                // 4. Custom Alert
-                // English translation of the Arabic alert message
-                showCustomAlert('Reward Claimed!', `You received 50 SHIB for joining the channel!`, 'success');
+                // CSS variable for rotation
+                const rotation = index * SEGMENT_ANGLE;
+                element.style.setProperty('--rotation', rotation);
                 
-            } else if (result.error.includes('already completed') || result.error.includes('not joined')) {
-                // If the server returns an error about completion or not joined, load data to sync UI
-                loadUserData();
-            }
-        }
+                // Skew calculation (90deg - (360/N)/2)
+                const skewAngle = 90 - (SEGMENT_ANGLE / 2);
 
-        /* ===== Invite Screen Functions (No changes needed) ===== */
-        
-        function inviteFriends() {
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            mainScreen.classList.remove('visible');
-            document.getElementById('inviteScreen').classList.add('visible');
-            generateReferralLink();
-            loadUserData();
-        }
-
-        function hideInvite(){
-            document.getElementById('inviteScreen').classList.remove('visible');
-            mainScreen.classList.add('visible');
-        }
-        
-        function generateReferralLink() {
-            const referralLinkInput = document.getElementById('referralLinkInput');
-            
-            if (!tgUser) {
-                referralLinkInput.value = 'User data not available.';
-                return;
-            }
-            
-            const userId = tgUser.id;
-            const botPath = "Bot_ad_watchbot/earn"; 
-            const inviteLink = `https://t.me/${botPath}?startapp=ref_${userId}`;
-            
-            referralLinkInput.value = inviteLink;
-        }
-
-        function copyReferralLink() {
-            const inviteLink = document.getElementById('referralLinkInput').value;
-            
-            if (inviteLink === 'User data not available.' || inviteLink === 'Generating Link...') {
-                // English translation of the Arabic alert message
-                showCustomAlert('Error!', 'The referral link is not ready yet. Please wait a moment.', 'warning');
-                return;
-            }
-
-            navigator.clipboard.writeText(inviteLink).then(() => {
-                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-                // English translation of the Arabic alert message
-                showCustomAlert('Link Copied!', 'The referral link has been copied to the clipboard.', 'success');
-            }).catch(err => {
-                console.error('Failed to copy text: ', err);
-                // English translation of the Arabic alert message
-                showCustomAlert('Copy Failed!', 'Failed to copy the link. Please try again.', 'error');
-            });
-        }
-        /* ===== End of Invite Screen Functions ===== */
-
-
-        /* ===== Spin Wheel (Wheel Code) (No changes needed) ===== */
-        const colors = ['#00bfff', '#ff8c00', '#28a745', '#ff4500', '#00f2fe'];
-        const prizeValues = sectors; 
-        const canvas = document.getElementById('wheelCanvas');
-        const ctx = canvas.getContext('2d');
-        const spinResult = document.getElementById('spinResult');
-        const spinBtn    = document.getElementById('spinBtn'); 
-        let spinning = false;
-        let currentAngle = 0;
-
-        function drawWheel() {
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
-            const radius = 130;
-            const sectorCount = sectors.length;
-            const arc = 2 * Math.PI / sectorCount;
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.font = '24px Vazirmatn, sans-serif'; // Set font size for emoji
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-
-            sectors.forEach((val, i) => {
-                const start = i * arc - Math.PI / 2; 
-                const end = start + arc;
-
-                // Draw sector background
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, start, end);
-                ctx.closePath();
-                ctx.fill();
-
-                // Draw sector border
-                ctx.beginPath();
-                ctx.strokeStyle = '#fff'; 
-                ctx.lineWidth = 3;
-                ctx.moveTo(centerX, centerY);
-                ctx.arc(centerX, centerY, radius, start, end);
-                ctx.closePath();
-                ctx.stroke();
-
-                // 🐱 Add Emoji to the sector
-                // Calculate the position for the emoji (midpoint of the arc, halfway to the edge)
-                const angle = start + arc / 2;
-                const textX = centerX + radius * 0.65 * Math.cos(angle);
-                const textY = centerY + radius * 0.65 * Math.sin(angle);
-
-                // Rotate context to align the emoji with the sector
-                ctx.save();
-                ctx.translate(textX, textY);
-                ctx.rotate(angle + Math.PI / 2); // Rotate to be perpendicular to the radius
-                ctx.fillStyle = '#000'; // Color doesn't matter for emoji usually
-                ctx.fillText('🐱', 0, 0); 
-                ctx.restore();
-            });
-
-            // Draw Center Circle
-            ctx.beginPath();
-            ctx.fillStyle = '#fff';
-            ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI); 
-            ctx.fill();
-            ctx.strokeStyle = '#ff3366';
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            
-            // Draw Mini Circle inside
-            ctx.beginPath();
-            ctx.fillStyle = '#ff3366';
-            ctx.arc(centerX, centerY, 8, 0, 2 * Math.PI); 
-            ctx.fill();
-            ctx.shadowColor = 'transparent';
-        }
-        drawWheel();
-
-        async function startSpin(){
-            if(spinning) return;
-            
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            
-            if (spinsToday >= DAILY_MAX_SPINS) {
-                return;
-            }
-            
-            // 1. Request Action ID from the Server for pre-spin (security check)
-            const preSpinActionId = await requestActionId('preSpin');
-            if (!preSpinActionId) return; // Error message already shown by fetchApi
-
-
-            // 2. Request pre-spin registration (Server checks for banned user and consumes the action ID)
-            const preSpinReqResult = await fetchApi({ 
-                type: 'preSpin',
-                action_id: preSpinActionId // ⬅️ Send Action ID
-            });
-
-            if (!preSpinReqResult.ok) {
-                await loadUserData(); 
-                return; 
-            }
-            
-            // 3. Request Action ID from the Server for the spin result (prize confirmation)
-            const spinResultActionId = await requestActionId('spinResult');
-            if (!spinResultActionId) {
-                // English translation of the Arabic alert message
-                showCustomAlert('Security Error!', 'Failed to get confirmation token. Please try again.', 'error');
-                await loadUserData(); 
-                return;
-            }
-            
-            // 4. Call Ad SDK (libtl.com)
-            show_10245709()
-                .then(async () => {
-                    spinning = true;
-                    spinBtn.disabled = true;
-                    spinResult.textContent = 'Spinning...'; 
-                    
-                    // 5. Request spin result and prize addition (Server runs limits, Rate Limit, and validates Action ID)
-                    const spinResultRes = await fetchApi({ 
-                        type: 'spinResult',
-                        action_id: spinResultActionId // ⬅️ Send Action ID
-                    });
-                    
-                    if (spinResultRes.ok) {
-                        const finalPrize = spinResultRes.data.actual_prize; 
-                        const prizeIndex = spinResultRes.data.prize_index !== undefined ? spinResultRes.data.prize_index : 0; 
-                        
-                        const sectorCount = sectors.length; 
-                        const arc = 2 * Math.PI / sectorCount; 
-                        
-                        const winningAngle = prizeIndex * arc + arc / 2; 
-                        
-                        let rotationToApply = Math.PI / 2 - winningAngle;
-                        
-                        rotationToApply = rotationToApply + (5 * 2 * Math.PI); 
-                        
-                        currentAngle += rotationToApply;
-
-                        canvas.style.transition = 'transform 4s cubic-bezier(0.22,0,0.2,1)';
-                        canvas.style.transform = `rotate(${currentAngle}rad)`;
-                        
-                        setTimeout(async ()=>{
-                            canvas.style.transition = 'none'; 
-                            
-                            // 6. Update balance and spin count with trusted server values 
-                            updateState({ 
-                                balance: spinResultRes.data.new_balance,
-                                spins_today: spinResultRes.data.new_spins_count
-                            });
-                            
-                            spinResult.textContent = `🎉\n\nYou won ${finalPrize} SHIB!`;
-                            // English translation of the Arabic alert message
-                            showCustomAlert('Congratulations!', `You won ${finalPrize} SHIB!`, 'success');
-                            
-                            await loadUserData(); 
-                            
-                        },4000); 
-
-                    } else {
-                        spinResult.textContent = `❌ ERROR ❌\n\n[STATUS] Error receiving prize. Please try again.`;
-                        // Custom Alert for spin result error is handled by fetchApi, but we ensure it here too:
-                        if (!spinResultRes.error.includes('SECURITY ERROR')) { 
-                            // English translation of the Arabic alert message
-                            showCustomAlert('Error!', 'Error receiving prize. Please try again.', 'error');
-                        }
-                        await loadUserData(); 
-                    }
-                    
-                    spinning   = false;
-                    updateUI(); 
-                })
-                .catch(e => {
-                    console.error("libtl.com Ad failed to show or was dismissed:", e);
-                    // Ad error/cancellation handling
-                    if (typeof e === 'string' && e.includes('canceled')) {
-                        // English translation of the Arabic alert message
-                        showCustomAlert('Ad Cancelled/Failed!', 'The ad was not watched completely. The attempt was not counted.', 'warning');
-                    } else {
-                        // English translation of the Arabic alert message
-                        showCustomAlert('Ad Load Failed!', 'Ad failed to load. The attempt was not counted. Please try again.', 'error');
-                    }
-                    loadUserData(); 
-                });
-        }
-
-        /* ===== Navigation and Withdraw (No changes needed) ===== */
-        function showSpin(){
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            mainScreen.classList.remove('visible');
-            document.getElementById('spinScreen').classList.add('visible');
-            loadUserData();
-            updateUI(); 
-        }
-        function hideSpin(){
-            document.getElementById('spinScreen').classList.remove('visible');
-            mainScreen.classList.add('visible');
-        }
-        
-        function showWithdraw(){
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
-            }
-            mainScreen.classList.remove('visible');
-            document.getElementById('withdrawScreen').classList.add('visible');
-            loadUserData();
-            displayWithdrawals(); 
-        }
-        
-        function hideWithdraw(){
-            document.getElementById('withdrawScreen').classList.remove('visible');
-            mainScreen.classList.add('visible');
-        }
-        
-        function displayWithdrawals() {
-            const container = document.getElementById('withdrawalHistoryContainer');
-            if (!withdrawalHistory || withdrawalHistory.length === 0) {
-                // English translation of the Arabic alert message
-                container.innerHTML = '<div class="no-records">No withdrawal requests currently.</div>';
-                return;
-            }
-
-            let tableHTML = '<table class="history-table">';
-            // English translation of the Arabic alert message
-            tableHTML += '<thead><tr><th>Date</th><th>Amount (SHIB)</th><th>Status</th></tr></thead>';
-            tableHTML += '<tbody>';
-
-            withdrawalHistory.forEach(record => {
-                // English translation of the Arabic alert message
-                const statusText = record.status === 'pending' ? 'Pending' : 'Completed';
-                const statusClass = record.status === 'pending' ? 'status-pending' : 'status-completed';
-                tableHTML += `
-                    <tr>
-                        <td>${record.date}</td>
-                        <td>${record.amount.toLocaleString()}</td>
-                        <td><span class="${statusClass}">${statusText}</span></td>
-                    </tr>
+                element.innerHTML = `
+                    <div class="sector-inner" style="--color: ${sector.color}; --angle: ${SEGMENT_ANGLE};">
+                        <span class="sector-text" style="--sectors: ${SECTORS_COUNT}; --text-rotation: ${rotation};">
+                            ${sector.prize}
+                        </span>
+                    </div>
                 `;
+                spinWheelElement.appendChild(element);
+            });
+            
+            // Add Center
+            const center = document.createElement('div');
+            center.className = 'wheel-center';
+            spinWheelElement.appendChild(center);
+            
+            // Add Pointer
+            const pointer = document.createElement('div');
+            pointer.className = 'pointer';
+            spinWheelElement.appendChild(pointer);
+        }
+        
+        // Initial wheel creation
+        createWheel();
+
+        spinButton.addEventListener('click', async () => {
+            if (spinButton.disabled) return;
+            
+            // 1. Get Action ID for preSpin (Security Check before spinning)
+            const preSpinActionId = await requestActionId('preSpin');
+            if (!preSpinActionId) return;
+
+            // Lock the button
+            spinButton.disabled = true;
+            spinButton.textContent = 'SPINNING...';
+
+            // 2. Perform Spin Animation (Client-side, purely visual)
+            // A long, random initial spin (e.g., 5 full rotations)
+            const initialRotation = 5 * 360; 
+            const randomOffset = Math.floor(Math.random() * 360); // Random visual start offset
+            spinWheelElement.style.transform = `rotate(${initialRotation + randomOffset}deg)`;
+            
+            // Wait for the initial visual spin to complete (e.g., 2 seconds)
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // 3. Get the actual server result for the spin
+            const spinActionId = await requestActionId('spinResult'); // Get new ID for result claim
+            if (!spinActionId) {
+                spinButton.disabled = false;
+                spinButton.textContent = 'SPIN';
+                return;
+            }
+
+            const result = await fetchApi({
+                type: 'spinResult',
+                user_id: appState.user_id,
+                action_id: spinActionId
             });
 
-            tableHTML += '</tbody></table>';
-            container.innerHTML = tableHTML;
-        }
+            if (result.ok) {
+                const { actual_prize, prize_index, new_balance, new_spins_count } = result.data;
+                
+                // Calculate final rotation to land on the correct segment
+                // Total rotations (5 full spins) + correction for the prize index
+                const rotationToTarget = (5 * 360) + (360 - (prize_index * SEGMENT_ANGLE) - (SEGMENT_ANGLE / 2));
+                
+                // Apply the final, controlled rotation
+                spinWheelElement.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+                spinWheelElement.style.transform = `rotate(${rotationToTarget}deg)`;
 
-        async function confirmWithdraw(){
-            if (isBanned) {
-                 // English translation of the Arabic alert message
-                 showCustomAlert('Access Denied!', 'This account has been banned.', 'error');
-                 return;
+                // Wait for the animation to finish
+                await new Promise(resolve => setTimeout(resolve, 5500)); 
+
+                // 4. Update state and UI
+                updateState({ 
+                    balance: new_balance, 
+                    spins_today: new_spins_count 
+                });
+                
+                showCustomAlert('Congratulations!', `You won **${actual_prize} SHIB**!`, 'success');
+
+            } else {
+                showCustomAlert('Spin Error', result.error || 'Failed to claim spin reward.', 'error');
             }
             
-            const binanceId = document.getElementById('binanceId').value.trim();
-            const amount = parseInt(document.getElementById('withdrawAmount').value);
+            // Reset button and wheel for next spin
+            spinButton.textContent = 'SPIN';
+            updateUI(); // Re-enables button if limit not reached
+            spinWheelElement.style.transition = 'none'; // Disable transition for instant reset if needed
+        });
+
+
+        // Withdraw
+        withdrawForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const binanceId = document.getElementById('binance-id').value.trim();
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+
+            if (amount < MIN_WITHDRAW || amount > appState.balance || !binanceId) {
+                showCustomAlert('Error', 'Please check your withdrawal amount and Binance ID.', 'error');
+                return;
+            }
             
-            if(!binanceId || binanceId.length < 8){ 
-                // English translation of the Arabic alert message
-                showCustomAlert('Invalid Input!', 'Please enter a valid Binance User ID (minimum 8 digits).', 'warning'); 
-                return; 
-            }
-            if(isNaN(amount) || amount < 400){ 
-                // English translation of the Arabic alert message
-                showCustomAlert('Invalid Amount!', 'The minimum withdrawal amount is 400 SHIB.', 'warning'); 
-                return; 
-            }
-            if(amount > shibBalance){ 
-                // English translation of the Arabic alert message
-                showCustomAlert('Balance Error!', `Your balance is insufficient. Your current balance is ${shibBalance.toLocaleString()} SHIB.`, 'error'); 
-                return; 
-            }
-            
-            // 1. Request Action ID from the Server ⬅️ تم التفعيل على Withdraw
+            // 1. Get Action ID from the Server ⬅️ تم التفعيل على Withdraw
             const actionId = await requestActionId('withdraw');
             if (!actionId) return;
 
             // 2. Send withdrawal request via API
             const result = await fetchApi({
                 type: 'withdraw',
+                user_id: appState.user_id,
                 binanceId: binanceId,
                 amount: amount,
                 action_id: actionId // ⬅️ إرسال Action ID
@@ -1507,15 +1290,68 @@ You will earn 5% of the revenue from every referral you bring through ads!
                 await loadUserData(); 
                 displayWithdrawals(); 
                 
-                // English translation of the Arabic alert message
-                showCustomAlert('Request Sent!', `Details:\nBinance ID: ${binanceId}\nAmount: ${amount.toLocaleString()} SHIB\n\nThe transfer will be processed within 24 hours.`, 'success');
+                showCustomAlert('Request Sent!', `Details:\nBinance ID: ${binanceId}\nAmount: ${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} SHIB\n\nThe transfer will be processed within 24 hours.`, 'success');
             }
-        }
-        
+        });
+
+        // Referral Copy Button
+        document.getElementById('copy-referral-link').addEventListener('click', () => {
+            const link = document.getElementById('referral-link').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                showCustomAlert('Copied', 'Referral link copied to clipboard.', 'success');
+            }).catch(err => {
+                console.error('Copy failed:', err);
+                showCustomAlert('Error', 'Failed to copy link. Please copy manually.', 'error');
+            });
+        });
+
+        // Task: Join Telegram Channel ⬅️ NEW HANDLER
+        joinTelegramButton.addEventListener('click', async () => {
+            if (joinTelegramButton.classList.contains('completed-task')) return;
+
+            // 1. Open Telegram Channel link
+            window.Telegram.WebApp.openTelegramLink(TELEGRAM_CHANNEL_URL);
+            
+            // 2. Give the user a moment to join (Optional delay, but better to check immediately after the action)
+            // await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // 3. Get Action ID from the Server
+            const actionId = await requestActionId('completeTask');
+            if (!actionId) return;
+
+            // 4. Send server request to claim reward
+            const result = await fetchApi({
+                type: 'completeTask',
+                user_id: appState.user_id,
+                action_id: actionId
+            });
+
+            if (result.ok) {
+                // 5. Update state and UI
+                updateState({ 
+                    balance: result.data.new_balance, 
+                    task_completed: true 
+                });
+                showCustomAlert('TASK COMPLETED!', `Congratulations, you earned ${result.data.actual_reward} SHIB.`, 'success');
+            } else {
+                // The server will return an error if the user hasn't joined the channel.
+                showCustomAlert('Action Required', result.error || 'Please ensure you have joined the channel and try again.', 'error');
+            }
+        });
+
         // Final event listener to ensure background audio starts on the first user interaction
         document.addEventListener('click', function handler() {
             playBGAudio();
             document.removeEventListener('click', handler); // Remove after first successful click
+        });
+        
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up Telegram Web App
+            window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand();
+            
+            loadUserData();
         });
     </script>
 </body>
