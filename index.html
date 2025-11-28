@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap'); 
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght~400;700&display=swap'); 
 
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Vazirmatn', Arial, Helvetica, sans-serif;overflow:hidden;background: #0d0c1d;}
@@ -163,15 +163,16 @@
         .nav-button.withdraw-btn-nav:hover{box-shadow:0 6px 0 #991919,0 10px 15px rgba(0,0,0,.2)}
         .nav-button.withdraw-btn-nav:active{box-shadow:0 3px 0 #991919,0 5px 8px rgba(0,0,0,.15)}
 
-        /* ===== Task Screen - REVISED STYLING (2D Professional) ===== */
+        /* ===== Task Screen - REVISED STYLING (High Fidelity) ===== */
         .task-screen{
             display:flex;
             flex-direction:column;
             align-items:center;
-            justify-content: center; /* Center content vertically */
-            padding-bottom: 120px; /* Space for the bottom nav bar */
+            justify-content: flex-start; /* Align content to the top */
+            padding-top: 50px; /* Add padding to the top */
+            padding-bottom: 120px; 
             overflow-y: auto;
-            background: #f4f7f9; /* Light, clean background */
+            background: #f0f4f8; /* Very light, professional background */
         }
         .task-header{ 
             text-align: center;
@@ -181,10 +182,10 @@
         }
         .task-title{ 
              font-family: 'Vazirmatn', sans-serif; 
-             font-size:24px;
-             color:#333; 
-             font-weight:700; 
-             text-shadow: none; 
+             font-size:28px; /* Slightly larger title */
+             color:#2c3e50; /* Darker, more professional color */
+             font-weight:800; /* Extra bold */
+             text-shadow: 1px 1px 2px rgba(0,0,0,0.05); 
         }
         /* task-description is removed from HTML, but style kept for safety */
         .task-description{
@@ -195,67 +196,109 @@
 
         .task-card-container {
             width: 90%;
-            max-width: 320px; /* Focused width */
-            background: #fff; 
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,.1); /* Soft shadow */
-            border: 1px solid #e0e6ec; 
-            margin-bottom: 20px;
+            max-width: 350px; /* Wider card */
+            background: linear-gradient(180deg, #ffffff, #f7f9fc); /* Subtle gradient for depth */
+            padding: 25px;
+            border-radius: 25px; /* More rounded corners */
+            box-shadow: 0 10px 30px rgba(0,0,0,.15), inset 0 0 10px rgba(255, 255, 255, 0.5); /* Enhanced shadow and inner highlight */
+            border: 2px solid #e0e6ec; /* Cleaner border */
+            margin-bottom: 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+        .task-card-container::before {
+            content: '⭐';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 50px;
+            opacity: 0.1;
+            transform: rotate(15deg);
+        }
+
         .task-item {
             padding: 0;
             border: none;
             background: transparent;
             box-shadow: none;
             margin-bottom: 25px;
-            display: block; /* Stack items */
+            display: block; 
         }
         .task-info h4 {
-            color: #4a90e2; 
+            color: #3498db; /* Professional blue */
             margin-bottom: 10px;
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
         }
         .task-info p {
-            color: #777; 
-            font-size: 14px;
-            margin-bottom: 15px;
+            color: #7f8c8d; /* Subdued text color */
+            font-size: 15px;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
         .task-reward {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ff9800; 
+            font-size: 28px; /* Larger reward text */
+            font-weight: 800;
+            color: #e67e22; /* Vivid orange */
             font-family: 'Orbitron', sans-serif;
-            padding: 10px 15px;
-            background: #fff3e0;
-            border-radius: 10px;
+            padding: 12px 20px;
+            background: #fff0e6;
+            border-radius: 15px;
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border: 1px dashed #e67e22; /* Dashed border to look like a coupon */
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0,0,0,.1);
         }
         .task-action-btn {
-            background:linear-gradient(145deg, #00b300, #008000); /* Standard Green for action */
-            color:#fff;border:none;padding:12px 25px;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;
-            box-shadow:0 5px 0 #005a00;transition:all .1s ease;
+            background:linear-gradient(145deg, #2ecc71, #27ae60); /* Success Green */
+            color:#fff;border:none;padding:15px 25px; /* Increased padding */
+            border-radius:12px;font-size:16px;font-weight:bold;cursor:pointer;
+            box-shadow:0 6px 0 #219d55;transition:all .1s ease; /* Deeper shadow for 3D effect */
             text-transform: uppercase;
-            width: 100%; /* Full width button */
+            width: 100%; 
             font-family: 'Vazirmatn', sans-serif;
             margin-top: 15px;
         }
         .task-action-btn:disabled {
-            background: #ccc;
-            box-shadow: 0 5px 0 #999;
+            background: linear-gradient(145deg, #bdc3c7, #95a5a6);
+            box-shadow: 0 6px 0 #7f8c8d;
             cursor: not-allowed;
-            color: #666;
+            color: #ecf0f1;
         }
-        .task-action-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #005a00}
+        .task-action-btn:active{transform:translateY(3px);box-shadow:0 3px 0 #219d55}
         
         .task-action-btn.completed {
-            background:linear-gradient(145deg, #a0a0a0, #707070); 
-            box-shadow:0 5px 0 #505050;
+            background:linear-gradient(145deg, #95a5a6, #7f8c8d); 
+            box-shadow:0 6px 0 #6c7a89;
+            color: #ecf0f1;
         }
-        .task-action-btn.completed:active{transform:translateY(3px);box-shadow:0 2px 0 #505050}
+        .task-action-btn.completed:active{transform:translateY(3px);box-shadow:0 3px 0 #6c7a89}
+
+        /* Task Note style */
+        .task-screen .note{
+            margin-top: 25px;
+            background: #f8f8f8;
+            border-left: 5px solid #3498db;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Added Back Button Style (Reusing back-btn style from withdraw/invite screens) */
+        .task-back-btn {
+            background:linear-gradient(145deg, #6c757d, #5a6268);
+            color:#fff;border:none;padding:12px 30px;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;
+            box-shadow:0 5px 0 #4e555b;transition:all .1s ease;
+            width: 90%;
+            max-width: 350px;
+            margin-bottom: 20px;
+        }
+        .task-back-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #4e555b}
         
         /* ===== Spin Screen ===== */
         .spin-screen{
@@ -564,20 +607,24 @@
 
     <div class="app-screen task-screen" id="taskScreen">
         <div class="task-card-container">
+             <div class="task-header">
+                <h2 class="task-title">🔥 Daily Bonus & Tasks</h2>
+            </div>
             <div class="task-item">
                 <div class="task-info">
                     <h4>Join Telegram Channel & Claim Reward</h4>
-                    <p>Get a one-time reward instantly.</p>
+                    <p>Complete this one-time task to instantly receive a welcome bonus to your balance.</p>
                 </div>
                 <div class="task-reward">+50 SHIB</div>
             </div>
             <button class="task-action-btn" id="taskActionBtn" onclick="handleTaskAction()">
                 <span>Join & Claim Reward</span>
             </button>
-            <div class="note" style="margin-top: 20px;">
-                💡 **Note:** You must join the channel first, wait 5 seconds, and then click 'Claim Reward'.
+            <div class="note">
+                💡 **Note:** Click the button to join the channel. Wait 5 seconds after joining, then click the button again to **'Claim Reward'**.
             </div>
         </div>
+        <button class="task-back-btn" onclick="hideTask()">Back to Main</button>
         
         </div>
 
@@ -1149,6 +1196,12 @@ You will earn 5% of the revenue from every referral you bring through ads!
             mainScreen.classList.remove('visible');
             document.getElementById('taskScreen').classList.add('visible');
             loadUserData();
+        }
+
+        // NEW function to hide the task screen (used by the new back button)
+        function hideTask(){
+            document.getElementById('taskScreen').classList.remove('visible');
+            mainScreen.classList.add('visible');
         }
 
         // Renamed and modified the old completeTask function
